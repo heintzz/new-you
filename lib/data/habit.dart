@@ -9,11 +9,12 @@ final List<HabitTask> dummyHabitTasks = [
       type: HabitType.habit,
       createdAt: DateTime.now()),
   HabitTask(
-      id: '2',
-      title: 'Read Books',
-      completionId: CompletionType.pending,
-      type: HabitType.habit,
-      createdAt: DateTime.now().subtract(Duration(days: 1))),
+    id: '2',
+    title: 'Read Books',
+    completionId: CompletionType.pending,
+    type: HabitType.habit,
+    createdAt: DateTime.now().subtract(Duration(days: 1)),
+  ),
   HabitTask(
       id: '3',
       title: 'Submit Assignment',
@@ -32,6 +33,14 @@ final List<HabitTask> dummyHabitTasks = [
       completionId: CompletionType.done,
       type: HabitType.task,
       createdAt: DateTime.now()),
+  // HabitTask(
+  //   id: '6',
+  //   title: 'Meditate',
+  //   completionId: CompletionType.pending,
+  //   type: HabitType.habit,
+  //   createdAt: DateTime.now().add(Duration(days: 1)),
+  //   parentId: 4,
+  // ),
 ];
 
 Color getCompletionColor(CompletionType status) {

@@ -46,8 +46,8 @@ class _HorizontalDateState extends State<HorizontalDate> {
         DateModel.getDaysInMonth(widget.currentDate),
         (index) => GestureDetector(
           onTap: () {
-            final newDate = DateTime(
-                widget.currentDate.year, widget.currentDate.month, index + 1);
+            final newDate = DateTime(widget.currentDate.year,
+                widget.currentDate.month, index + 1, 0);
             widget.onDateSelected(newDate);
           },
           child: Container(

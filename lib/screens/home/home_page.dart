@@ -14,27 +14,85 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day, 0);
+
   final List<HabitTask> tasks = dummyHabitTasks;
   List<HabitTask> filteredTasks = [];
 
+  String generateUniqueId() {
+    return DateTime.now().microsecondsSinceEpoch.toString();
+  }
+
   void _changeCompletionStatus(HabitTask task) {
     setState(() {
-      task.completionId = getNextStatus(task.completionId);
+      if (task.type != HabitType.habit) {
+        task.completionId = getNextStatus(task.completionId);
+        return;
+      }
+
+      // Jika task adalah habit
+      final isOnTheSameDay = task.createdAt.year == selectedDate.year &&
+          task.createdAt.month == selectedDate.month &&
+          task.createdAt.day == selectedDate.day;
+
+      if (!isOnTheSameDay) {
+        // create a copy -> TODO: jmplement to database
+        tasks.add(HabitTask(
+          id: generateUniqueId(),
+          title: task.title,
+          type: task.type,
+          createdAt: selectedDate,
+          completionId: getNextStatus(CompletionType.pending),
+          parentId: task.id,
+        ));
+      } else {
+        task.completionId = getNextStatus(task.completionId);
+      }
+
+      filteredTasks = _filterTasks(tasks);
     });
-    print("Updated task: ${task.title}, Status: ${task.completionId}");
+  }
+
+  List<HabitTask> _filterTasks(List<HabitTask> tasks) {
+    // filter today
+    //  - task and habit today
+    // filter yang habit
+    //  - create a copy on this selected date for habit that has lesser createdAt
+    // merge those two array
+
+    final todayHabits = tasks.where((task) {
+      final isOnTheSameDay = task.createdAt.year == selectedDate.year &&
+          task.createdAt.month == selectedDate.month &&
+          task.createdAt.day == selectedDate.day;
+      return isOnTheSameDay;
+    }).toList();
+
+    // dummy habit
+    final firstInstanceHabits = tasks.where((task) {
+      return (task.type == HabitType.habit) &&
+          (task.parentId == null) &&
+          selectedDate.isAfter(task.createdAt);
+    }).toList();
+
+    // daftar parentId dari todayHabits
+    final todayParentIds = todayHabits
+        .map((habit) => habit.parentId.toString())
+        .whereType<String>()
+        .toSet();
+
+    // omit semua yang udah ada "penerusnya"
+    final filteredFirstInstanceHabits = firstInstanceHabits.where((habit) {
+      return !todayParentIds.contains(habit.id);
+    }).toList();
+
+    return [...todayHabits, ...filteredFirstInstanceHabits];
   }
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      filteredTasks = tasks.where((task) {
-        return task.createdAt.year == selectedDate.year &&
-            task.createdAt.month == selectedDate.month &&
-            task.createdAt.day == selectedDate.day;
-      }).toList();
-    });
+    filteredTasks = _filterTasks(tasks);
   }
 
   @override
@@ -76,11 +134,7 @@ class _HomeState extends State<Home> {
                 onDateSelected: (DateTime newDate) {
                   setState(() {
                     selectedDate = newDate;
-                    filteredTasks = tasks.where((task) {
-                      return task.createdAt.year == selectedDate.year &&
-                          task.createdAt.month == selectedDate.month &&
-                          task.createdAt.day == selectedDate.day;
-                    }).toList();
+                    filteredTasks = _filterTasks(tasks);
                   });
                 },
               ),

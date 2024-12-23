@@ -28,14 +28,16 @@ CompletionType getNextStatus(CompletionType currentStatus) {
 class HabitTask {
   final String id;
   final String title;
-  CompletionType completionId;
   final HabitType type;
   final DateTime createdAt;
+  final String? parentId;
+  CompletionType completionId;
 
   HabitTask(
       {required this.id,
       required this.title,
       required this.type,
-      this.completionId = CompletionType.pending,
-      required this.createdAt});
+      required this.createdAt,
+      this.parentId,
+      this.completionId = CompletionType.pending});
 }
