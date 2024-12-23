@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
     }).toList();
 
     // dummy habit
-    final firstInstanceHabits = tasks.where((task) {
+    final dummyHabit = tasks.where((task) {
       return (task.type == HabitType.habit) &&
           (task.parentId == null) &&
           selectedDate.isAfter(task.createdAt);
@@ -92,8 +92,8 @@ class _HomeState extends State<Home> {
         selectedDate.month >= today.month &&
         selectedDate.day > today.day;
 
-    // omit semua yang udah ada "penerusnya"
-    final filteredFirstInstanceHabits = firstInstanceHabits.where((habit) {
+    // omit semua yang udah ada "penerusnya" ubah completionId sesuai rule
+    final filteredDummyHabit = dummyHabit.where((habit) {
       return !todayParentIds.contains(habit.id);
     }).map((habit) {
       return HabitTask(
@@ -108,7 +108,7 @@ class _HomeState extends State<Home> {
       );
     }).toList();
 
-    final filteredHabits = [...todayHabits, ...filteredFirstInstanceHabits];
+    final filteredHabits = [...todayHabits, ...filteredDummyHabit];
     return filteredHabits;
   }
 
