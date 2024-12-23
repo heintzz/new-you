@@ -5,7 +5,8 @@ import 'package:remindme/screens/main_activity.dart';
 import 'package:remindme/services/habit.services.dart';
 
 class AddHabitPage extends StatelessWidget {
-  const AddHabitPage({super.key});
+  final String habitCategory;
+  const AddHabitPage({super.key, required this.habitCategory});
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +14,17 @@ class AddHabitPage extends StatelessWidget {
         body: SafeArea(
       child: Container(
         padding: const EdgeInsets.only(top: 20),
-        child: HabitInput(),
+        child: HabitInput(
+          habitCategory: habitCategory,
+        ),
       ),
     ));
   }
 }
 
 class HabitInput extends StatefulWidget {
-  HabitInput({super.key});
+  final String habitCategory;
+  HabitInput({super.key, required this.habitCategory});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -50,9 +54,9 @@ class _HabitInputState extends State<HabitInput> {
                       _title = value;
                     });
                   },
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Task',
+                    labelText: widget.habitCategory,
                   ),
                 ),
                 InkWell(
@@ -101,8 +105,8 @@ class _HabitInputState extends State<HabitInput> {
                     final HabitTask newHabit = HabitTask(
                         id: generateUniqueId(),
                         title: _title,
-                        type: HabitType.task,
-                        category: "task",
+                        type: HabitType.fromString(widget.habitCategory),
+                        category: _selectedCategory,
                         createdAt: DateTime.now());
                     HabitServices.createHabit(task: newHabit);
                     _backToHome(context);

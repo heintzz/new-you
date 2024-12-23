@@ -13,15 +13,12 @@ class HabitList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Column(children: [
-        ...tasks.map((task) => HabitCard(
-              task: task,
-              onStatusChange: onStatusChange,
-            ))
-      ]),
-    );
+    return Column(children: [
+      ...tasks.map((task) => HabitCard(
+            task: task,
+            onStatusChange: onStatusChange,
+          ))
+    ]);
   }
 }
 
@@ -38,7 +35,11 @@ class HabitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 0,
       margin: EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
       child: ListTile(
         leading: Icon(Icons.category),
         title: Text(task.title),

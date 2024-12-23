@@ -12,6 +12,16 @@ enum HabitType {
         return 'Task';
     }
   }
+
+  static HabitType fromString(String? value) {
+    switch (value?.toLowerCase()) {
+      case 'task':
+        return HabitType.task;
+      case 'habit':
+      default:
+        return HabitType.habit;
+    }
+  }
 }
 
 enum CompletionType { lock, pending, done, skip }

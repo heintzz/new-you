@@ -42,62 +42,66 @@ class _HorizontalDateState extends State<HorizontalDate> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       controller: _scrollController,
-      child: Row(
-          children: List.generate(
-        DateModel.getDaysInMonth(widget.currentDate),
-        (index) => GestureDetector(
-          onTap: () {
-            final newDate = DateTime(widget.currentDate.year,
-                widget.currentDate.month, index + 1, 0);
-            widget.onDateSelected(newDate);
-          },
-          child: Container(
-              decoration: BoxDecoration(
-                color:
-                    index == position ? Colors.purple[300] : Colors.grey[200],
-              ),
-              clipBehavior: Clip.hardEdge,
-              width: boxWidth,
-              height: 80,
-              margin: EdgeInsets.all(boxMargin),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    child: Text(
-                      DateModel.getDayName(widget.currentDate, index),
-                      style: index == position
-                          ? TextStyle(color: Colors.white)
-                          : TextStyle(color: Colors.black),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+            children: List.generate(
+          DateModel.getDaysInMonth(widget.currentDate),
+          (index) => GestureDetector(
+            onTap: () {
+              final newDate = DateTime(widget.currentDate.year,
+                  widget.currentDate.month, index + 1, 0);
+              widget.onDateSelected(newDate);
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                  color:
+                      index == position ? Colors.purple[300] : Colors.grey[200],
+                ),
+                clipBehavior: Clip.hardEdge,
+                width: boxWidth,
+                height: 80,
+                margin: EdgeInsets.all(boxMargin),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        DateModel.getDayName(widget.currentDate, index),
+                        style: index == position
+                            ? TextStyle(color: Colors.white)
+                            : TextStyle(color: Colors.black),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          color: index == position
-                              ? Colors.purple[700]
-                              : Colors.grey[300],
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10))),
-                      child: Center(
-                          child: Text(
-                        "${index + 1}",
-                        style: TextStyle(
-                            fontWeight: index == position
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            color:
-                                index == position ? Colors.white : Colors.black,
-                            fontSize: 20),
-                      )),
-                    ),
-                  )
-                ],
-              )),
-        ),
-      )),
+                    Expanded(
+                      child: Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                            color: index == position
+                                ? Colors.purple[700]
+                                : Colors.grey[300],
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10))),
+                        child: Center(
+                            child: Text(
+                          "${index + 1}",
+                          style: TextStyle(
+                              fontWeight: index == position
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+                              color: index == position
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 20),
+                        )),
+                      ),
+                    )
+                  ],
+                )),
+          ),
+        )),
+      ),
     );
   }
 }

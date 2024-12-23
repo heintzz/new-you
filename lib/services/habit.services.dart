@@ -1,7 +1,8 @@
+import 'package:remindme/data/habit.dart';
 import 'package:remindme/model/habit_model.dart';
 
 class HabitServices {
-  static final List<HabitTask> _tasks = [];
+  static final List<HabitTask> _tasks = dummyHabitTasks;
 
   // CREATE
   static Future<void> createHabit({required HabitTask task}) async {
@@ -59,6 +60,36 @@ class HabitServices {
 
     final filteredHabits = [...todayHabits, ...filteredDummyHabit];
     return filteredHabits;
+  }
+
+  static void updateCompletionStatus(
+      {required HabitTask task, required DateTime date}) {
+    if (task.completionId == CompletionType.lock) {
+      return;
+    }
+
+    if (task.type != HabitType.habit) {
+      task.completionId = getNextStatus(task.completionId);
+      return;
+    }
+
+    final isOnTheSameDay = task.createdAt.year == date.year &&
+        task.createdAt.month == date.month &&
+        task.createdAt.day == date.day;
+
+    if (!isOnTheSameDay) {
+      _tasks.add(HabitTask(
+        id: generateUniqueId(),
+        title: task.title,
+        type: task.type,
+        createdAt: date,
+        category: task.category,
+        completionId: getNextStatus(CompletionType.pending),
+        parentId: task.id,
+      ));
+    } else {
+      task.completionId = getNextStatus(task.completionId);
+    }
   }
 
   // UPDATE
