@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:remindme/model/habit_model.dart';
 import 'package:remindme/screens/add_habit/category.dart';
 import 'package:remindme/screens/main_activity.dart';
-import 'package:remindme/services/db_helper.dart';
+import 'package:remindme/services/habit.services.dart';
 
 class AddHabitPage extends StatelessWidget {
   const AddHabitPage({super.key});
@@ -27,8 +28,6 @@ class HabitInput extends StatefulWidget {
 }
 
 class _HabitInputState extends State<HabitInput> {
-  final DatabaseService _databaseService = DatabaseService.instance;
-
   String _title = "";
   String _selectedCategory = "";
 
@@ -99,7 +98,13 @@ class _HabitInputState extends State<HabitInput> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_title.isNotEmpty & _selectedCategory.isNotEmpty) {
-                    // _databaseService.addHabit(_title, _selectedCategory);
+                    final HabitTask newHabit = HabitTask(
+                        id: generateUniqueId(),
+                        title: _title,
+                        type: HabitType.task,
+                        category: "task",
+                        createdAt: DateTime.now());
+                    HabitServices.createHabit(task: newHabit);
                     _backToHome(context);
                   } else {
                     print("Please fill out the task");

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:remindme/data/habit.dart';
 import 'package:remindme/model/habit_model.dart';
 
 class HabitList extends StatelessWidget {
