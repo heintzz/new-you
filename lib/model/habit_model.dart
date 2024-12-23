@@ -12,10 +12,12 @@ enum HabitType {
   }
 }
 
-enum CompletionType { pending, done, skip }
+enum CompletionType { lock, pending, done, skip }
 
 CompletionType getNextStatus(CompletionType currentStatus) {
   switch (currentStatus) {
+    case CompletionType.lock:
+      return CompletionType.lock;
     case CompletionType.pending:
       return CompletionType.done;
     case CompletionType.done:
